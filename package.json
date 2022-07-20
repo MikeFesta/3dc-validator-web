@@ -1,10 +1,10 @@
 {
-  "name": "khronos-3d-commerce-validator-web",
-  "version": "1.0.0-alpha.1",
-  "description": "Web based single page application implementation of the khronos-3d-commerce-validator package",
+  "name": "3dc-validator-web",
+  "version": "1.0.0-alpha.2",
+  "description": "Web based single page application implementation of the 3dc-validator package",
   "main": "index.js",
   "bin": {
-    "khronos-3d-commerce-validator-web": "bin/app.js"
+    "3dc-validator-web": "bin/app.js"
   },
   "scripts": {
     "test": "test",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MikeFesta/khronos-3d-commerce-validator-web.git"
+    "url": "git+https://github.com/MikeFesta/3dc-validator-web.git"
   },
   "keywords": [
     "khronos",
@@ -29,11 +29,11 @@
   "author": "Mike Festa",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/MikeFesta/khronos-3d-commerce-validator-web/issues"
+    "url": "https://github.com/MikeFesta/3dc-validator-web/issues"
   },
-  "homepage": "https://github.com/MikeFesta/khronos-3d-commerce-validator-web#readme",
+  "homepage": "https://github.com/MikeFesta/3dc-validator-web#readme",
   "dependencies": {
-    "@mikefesta/khronos-3d-commerce-validator": "^1.0.0-alpha.1"
+    "@mikefesta/3dc-validator": "^1.0.0-alpha.2"
   },
   "devDependencies": {
     "webpack": "^5.73.0",

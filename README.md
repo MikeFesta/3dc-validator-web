@@ -8,8 +8,8 @@
 open index.html in a modern web browser
 
 ### About this project
-This is an implementation of the khronos-3d-commerce-validator npm package that
-runs in a web browser.
+This is an implementation of the 3dc-validator npm package that runs in a
+web browser.
 
 The primary objective of this tools is to check a 3D model against a
 specification file to report if the model meets the requirements for a given
