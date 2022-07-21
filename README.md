@@ -20,11 +20,11 @@ https://github.com/KhronosGroup/3DC-Asset-Creation/
 #### Checks currently available
 * File Size (min/max)
 * Triangle Count (max)
+* Material Count (max)
 
 #### Checks to be added
 * Dimensions
 * Transparent Geometry Separated
-* Material Count
 * 0-1 UV Texture Space
 * Mesh Count
 * Node Count
