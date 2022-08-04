@@ -40,6 +40,25 @@ async function loadModel(validator: Validator): Promise<void> {
   }
 }
 
+async function loadProductInfo(validator: Validator): Promise<void> {
+  try {
+    const input = $('productInfoInput') as HTMLInputElement;
+    await validator.productInfo.loadFromFileInput(input.files[0]);
+    if (validator.productInfo.loaded) {
+      $('productInfoIcon').classList.remove('fail');
+      $('productInfoIcon').classList.add('pass');
+    } else {
+      $('productInfoIcon').classList.remove('pass');
+      $('productInfoIcon').classList.add('fail');
+    }
+    renderReport(validator);
+  } catch (err) {
+    $('productInfoIcon').classList.remove('pass');
+    $('productInfoIcon').classList.add('fail');
+    reportError((err as Error).message);
+  }
+}
+
 async function loadSchema(validator: Validator): Promise<void> {
   try {
     const input = $('schemaInput') as HTMLInputElement;
@@ -73,7 +92,7 @@ function renderReport(validator: Validator) {
     while (reportTable.hasChildNodes()) {
       reportTable.removeChild(reportTable.firstChild);
     }
-    validator.report.getItems().forEach(item => {
+    validator.report.getItems().forEach((item: any) => {
       const row = document.createElement('tr');
 
       const name = document.createElement('td');
@@ -109,7 +128,7 @@ document.body.onload = () => {
   $('version').appendChild(document.createTextNode('Version: ' + validator.version));
 
   // Drag and drop area highlighting
-  ['modelDropArea', 'schemaDropArea'].forEach(elementName => {
+  ['modelDropArea', 'productInfoDropArea', 'schemaDropArea'].forEach(elementName => {
     ['dragenter', 'dragover'].forEach(eventName => {
       $(elementName).addEventListener(eventName, ev => {
         preventDefaults(ev);
@@ -130,6 +149,14 @@ document.body.onload = () => {
     loadModel(validator);
   });
 
+  // Drag and drop product info load
+  $('productInfoDropArea').addEventListener('drop', ev => {
+    preventDefaults(ev);
+    removeHighlightClass($('productInfoDropArea'));
+    ($('productInfoInput') as HTMLInputElement).files = ev.dataTransfer.files;
+    loadProductInfo(validator);
+  });
+
   // Drag and drop schema load
   $('schemaDropArea').addEventListener('drop', ev => {
     preventDefaults(ev);
@@ -141,6 +168,9 @@ document.body.onload = () => {
   // Load from traditional file input elements
   $('modelInput').addEventListener('change', ev => {
     loadModel(validator);
+  });
+  $('productInfoInput').addEventListener('change', ev => {
+    loadProductInfo(validator);
   });
   $('schemaInput').addEventListener('change', ev => {
     loadSchema(validator);

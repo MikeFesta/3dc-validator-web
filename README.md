@@ -21,15 +21,17 @@ https://github.com/KhronosGroup/3DC-Asset-Creation/
 * File Size (min/max)
 * Triangle Count (max)
 * Material Count (max)
+* Texture Map Resolution Power of 2
+* Dimensions (min/max)
+* Dimensions (product within tolerance)
 
 #### Checks to be added
-* Dimensions
 * Transparent Geometry Separated
 * 0-1 UV Texture Space
 * Mesh Count
 * Node Count
 * Primitive Count
-* Texture Map Resolution
+* Texture Map Resolution (min/max by type)
 * Texture Density
 * Hard Edges
 * PBR Safe Colors
@@ -38,4 +40,3 @@ https://github.com/KhronosGroup/3DC-Asset-Creation/
 * Inverted UVs
 * Clean Origin for Top Node
 * Non-Manifold Edges
-
