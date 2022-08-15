@@ -113,6 +113,14 @@ function renderReport(validator: Validator) {
       message.appendChild(document.createTextNode(item.message));
       row.appendChild(message);
 
+      const url = document.createElement('td');
+      url.setAttribute('class', 'report-item-url');
+      const urlLink = document.createElement('a');
+      urlLink.setAttribute('href', item.guidelinesUrl);
+      urlLink.appendChild(document.createTextNode('Asset Creation Guidelines Link'));
+      url.appendChild(urlLink);
+      row.appendChild(url);
+
       reportTable.appendChild(row);
     });
   } catch (err) {
