@@ -1,5 +1,6 @@
 import { SchemaJSONInterface } from '../node_modules/@mikefesta/3dc-validator/dist/SchemaJSON';
 import { Validator } from '../node_modules/@mikefesta/3dc-validator/dist/Validator';
+import { GltfValidatorReportIssuesMessageInterface } from '../node_modules/@mikefesta/3dc-validator/dist/GltfValidatorReport';
 
 function $(id: string) {
   return document.getElementById(id);
@@ -216,13 +217,30 @@ function renderReport(validator: Validator) {
       message.setAttribute('class', 'report-item-message');
       message.setAttribute('class', !item.tested ? 'not-tested' : item.pass ? 'not-tested' : 'fail');
       message.appendChild(document.createTextNode(item.message));
+      // Display extra info from the glTF Validator report
+      if (item.name == 'glTF Validator') {
+        if (validator.model.gltfValidatorReport.issues.messages.length > 0) {
+          const ul = document.createElement('ul');
+          const error_names = ['Error', 'Warning', 'Info', 'Hint'];
+          validator.model.gltfValidatorReport.issues.messages.forEach(
+            (message: GltfValidatorReportIssuesMessageInterface) => {
+              const li = document.createElement('li');
+              li.appendChild(
+                document.createTextNode(error_names[message.severity] + ': ' + message.message + ' ' + message.pointer),
+              );
+              ul.appendChild(li);
+            },
+          );
+          message.appendChild(ul);
+        }
+      }
       row.appendChild(message);
 
       const url = document.createElement('td');
       url.setAttribute('class', 'report-item-url');
       const urlLink = document.createElement('a');
       urlLink.setAttribute('href', item.guidelinesUrl);
-      urlLink.appendChild(document.createTextNode('Asset Creation Guidelines Link'));
+      urlLink.appendChild(document.createTextNode('Reference Link'));
       url.appendChild(urlLink);
       row.appendChild(url);
 
