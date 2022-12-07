@@ -236,6 +236,10 @@ function renderReport(validator: Validator) {
       }
       row.appendChild(message);
 
+      const componentMessage = document.createElement('td');
+      componentMessage.appendChild(document.createTextNode(item.componentMessage));
+      row.appendChild(componentMessage);
+
       const url = document.createElement('td');
       url.setAttribute('class', 'report-item-url');
       const urlLink = document.createElement('a');
@@ -248,7 +252,7 @@ function renderReport(validator: Validator) {
     });
     const tr = document.createElement('tr');
     const td = document.createElement('td');
-    td.setAttribute('colspan', '4');
+    td.setAttribute('colspan', '5');
     td.setAttribute('style', 'text-align:center');
     const downloadJsonButton = document.createElement('button');
     downloadJsonButton.setAttribute('class', 'download');
@@ -257,6 +261,14 @@ function renderReport(validator: Validator) {
     };
     downloadJsonButton.appendChild(document.createTextNode('Download Report in JSON'));
     td.appendChild(downloadJsonButton);
+    td.appendChild(document.createTextNode(' '));
+    const downloadCsvButton = document.createElement('button');
+    downloadCsvButton.setAttribute('class', 'download');
+    downloadCsvButton.onclick = () => {
+      downloadReportCsv(validator);
+    };
+    downloadCsvButton.appendChild(document.createTextNode('Download Report in CSV'));
+    td.appendChild(downloadCsvButton);
     tr.appendChild(td);
     reportTable.appendChild(tr);
     reportTable.scrollIntoView();
@@ -381,11 +393,7 @@ function downloadSchemaJson() {
   a.click();
 }
 
-function downloadReportJson(validator: Validator) {
-  const jsonString = validator.getReportJson();
-  const dataString = 'data:text/json;charset=utf-8,' + encodeURIComponent(jsonString);
-  const a = document.createElement('a');
-  a.href = dataString;
+function getFilenameWithTimestamp(filename: string) {
   const date = new Date();
   const timestamp = [
     date.getFullYear(),
@@ -395,7 +403,24 @@ function downloadReportJson(validator: Validator) {
     ('0' + date.getMinutes()).slice(-2),
     ('0' + date.getSeconds()).slice(-2),
   ].join('-');
-  a.download = '3dc-validator-report-' + timestamp + '.json';
+  return filename.substring(0, filename.lastIndexOf('.')) + '-3DQC-' + timestamp;
+}
+
+function downloadReportCsv(validator: Validator) {
+  const csvString = validator.getReportCsv();
+  const dataString = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+  const a = document.createElement('a');
+  a.href = dataString;
+  a.download = getFilenameWithTimestamp(validator.model.filename) + '.csv';
+  a.click();
+}
+
+function downloadReportJson(validator: Validator) {
+  const jsonString = validator.getReportJson();
+  const dataString = 'data:text/json;charset=utf-8,' + encodeURIComponent(jsonString);
+  const a = document.createElement('a');
+  a.href = dataString;
+  a.download = getFilenameWithTimestamp(validator.model.filename) + '.json';
   a.click();
 }
 

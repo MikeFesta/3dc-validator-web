@@ -130,7 +130,7 @@
       .note {
         background-color: #ffa;
         margin: 6px;
-        padding: 2px;
+        padding: 2px 4px;
       }
       .section {
         border: solid 1px #666;
@@ -168,7 +168,7 @@
     </style>
   </head>
   <body>
-    <script src="dist/main-rc5.js"></script>
+    <script src="dist/main.js"></script>
     <div class="heading">
       <div class="version" id="version"></div>
       <div class="title">3D Commerce Validator</div>
@@ -192,7 +192,7 @@
     </div>
 
     <div class="section">
-      <h3>1. Validation Schema</h3>
+      <h3>1. Validation Schema (optional - recommended used by default)</h3>
       <p class="instructions">
         The 3D Commerce recommended values are based on the <a href="https://github.com/KhronosGroup/3DC-Asset-Creation/blob/main/asset-creation-guidelines/RealtimeAssetCreationGuidelines.md">Asset Creation Guidelines</a>.
         You can edit these settings and download a json file for future use.
@@ -230,6 +230,11 @@
               <button class="edit" id="saveAndCloseSchemaButton">
                 Save and Close
               </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <p class="note">Note: Use -1 to disable values so they are not tested</p>
             </td>
           </tr>
           <tr>
