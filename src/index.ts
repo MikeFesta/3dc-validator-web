@@ -1,6 +1,16 @@
 import { SchemaJSONInterface } from '../node_modules/@mikefesta/3dc-validator/dist/SchemaJSON';
 import { Validator } from '../node_modules/@mikefesta/3dc-validator/dist/Validator';
 import { GltfValidatorReportIssuesMessageInterface } from '../node_modules/@mikefesta/3dc-validator/dist/GltfValidatorReport';
+import {
+  ArcRotateCamera,
+  Color4,
+  Engine,
+  HemisphericLight,
+  Scene,
+  SceneLoader,
+  Vector3,
+} from '../node_modules/@babylonjs/core/index';
+import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 
 function $(id: string) {
   return document.getElementById(id);
@@ -32,7 +42,6 @@ function clearReport() {
 
 async function loadModel(validator: Validator): Promise<void> {
   try {
-    clearReport();
     // ensure the latest settings in the form are loaded, if the user did not save and close
     validator.schema.loadFromSchemaObject(getSchemaFromForm());
     const input = $('modelInput') as HTMLInputElement;
@@ -45,14 +54,52 @@ async function loadModel(validator: Validator): Promise<void> {
     modelLoadingSpinner.style.display = 'none';
     if (validator.model.loaded) {
       $('modelIcon').classList.remove('fail');
-      $('modelIcon').classList.add('pass');
+      $('modelLoader').style.display = 'none';
+      $('model3dView').style.display = 'block';
+
+      const canvas = $('modelCanvas') as HTMLCanvasElement;
+      const engine = new Engine(canvas);
+      const scene = new Scene(engine);
+      scene.clearColor = new Color4(1.0, 1.0, 1.0, 1.0);
+
+      const height = validator.model.height.value as number;
+      const length = validator.model.length.value as number;
+      const width = validator.model.width.value as number;
+      const cameraRadius = height + width + length;
+      const minDimension = Math.min(height, length, width);
+      const maxDimension = Math.max(height, length, width);
+
+      const camera = new ArcRotateCamera(
+        'camera',
+        Math.PI / 2,
+        Math.PI / 2.5,
+        cameraRadius,
+        new Vector3(0, height / 2, 0),
+        scene,
+      );
+      camera.lowerRadiusLimit = cameraRadius / 2;
+      camera.upperRadiusLimit = (cameraRadius * 3) / 2;
+      camera.minZ = minDimension / 10;
+      camera.maxZ = maxDimension * 10;
+      camera.panningDistanceLimit = cameraRadius / 2;
+      camera.attachControl(canvas, true);
+
+      new HemisphericLight('light', new Vector3(0, cameraRadius, 0), scene);
+
+      engine.runRenderLoop(() => scene.render());
+
+      // Load the model
+      const assetArrayBuffer = validator.model.arrayBuffer;
+      const assetBlob = new Blob([assetArrayBuffer]);
+      const assetUrl = URL.createObjectURL(assetBlob);
+      await SceneLoader.AppendAsync(assetUrl, undefined, scene, undefined, '.glb');
+
+      $('model3dView').scrollIntoView();
     } else {
-      $('modelIcon').classList.remove('pass');
       $('modelIcon').classList.add('fail');
     }
     renderReport(validator);
   } catch (err) {
-    $('modelIcon').classList.remove('pass');
     $('modelIcon').classList.add('fail');
     reportError((err as Error).message);
   }
@@ -271,7 +318,6 @@ function renderReport(validator: Validator) {
     td.appendChild(downloadCsvButton);
     tr.appendChild(td);
     reportTable.appendChild(tr);
-    reportTable.scrollIntoView();
   } catch (err) {
     reportError((err as Error).message);
   }

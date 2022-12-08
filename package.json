@@ -33,6 +33,8 @@
   },
   "homepage": "https://github.com/MikeFesta/3dc-validator-web#readme",
   "dependencies": {
+    "@babylonjs/core": "^5.35.1",
+    "@babylonjs/loaders": "^5.35.1",
     "@mikefesta/3dc-validator": "^1.0.0-rc.6"
   },
   "devDependencies": {
