@@ -1,6 +1,6 @@
 {
   "name": "3dc-validator-web",
-  "version": "1.0.0-rc.6",
+  "version": "1.0.0-rc.7",
   "description": "Web based single page application implementation of the 3dc-validator package",
   "main": "index.js",
   "bin": {
@@ -35,7 +35,7 @@
   "dependencies": {
     "@babylonjs/core": "^5.35.1",
     "@babylonjs/loaders": "^5.35.1",
-    "@mikefesta/3dc-validator": "^1.0.0-rc.6"
+    "@mikefesta/3dc-validator": "^1.0.0-rc.7"
   },
   "devDependencies": {
     "ts-loader": "^9.3.1",

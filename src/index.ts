@@ -5,6 +5,7 @@ import {
   ArcRotateCamera,
   Color4,
   Engine,
+  FilesInputStore,
   HemisphericLight,
   Scene,
   SceneLoader,
@@ -49,7 +50,11 @@ async function loadModel(validator: Validator): Promise<void> {
     const modelLoadingSpinner = $('modelLoadingSpinner');
     modelCubeSvg.style.display = 'none';
     modelLoadingSpinner.style.display = 'block';
-    await validator.model.loadFromFileInput(input.files[0]);
+    if (input.files.length === 1) {
+      await validator.model.loadFromGlbFile(input.files[0]);
+    } else {
+      await validator.model.loadFromGltfFiles(Array.from(input.files));
+    }
     modelCubeSvg.style.display = '';
     modelLoadingSpinner.style.display = 'none';
     if (validator.model.loaded) {
@@ -90,11 +95,26 @@ async function loadModel(validator: Validator): Promise<void> {
 
       // Load the model
       const assetArrayBuffer = validator.model.arrayBuffer;
-      const assetBlob = new Blob([assetArrayBuffer]);
-      const assetUrl = URL.createObjectURL(assetBlob);
-      await SceneLoader.AppendAsync(assetUrl, undefined, scene, undefined, '.glb');
-
-      $('model3dView').scrollIntoView();
+      if (assetArrayBuffer) {
+        // Single glb with data available from the validator
+        const assetBlob = new Blob([assetArrayBuffer]);
+        const assetUrl = URL.createObjectURL(assetBlob);
+        await SceneLoader.AppendAsync(assetUrl, undefined, scene, undefined, '.glb');
+        $('model3dView').scrollIntoView();
+      } else {
+        // glTF + files, load from the file input form element
+        const files = Array.from(input.files);
+        let gltfFile = null as unknown as File;
+        files.forEach(file => {
+          FilesInputStore.FilesToLoad[file.name] = file;
+          if (file.name.endsWith('gltf')) {
+            gltfFile = file;
+          }
+        });
+        if (gltfFile) {
+          await SceneLoader.AppendAsync('file:', gltfFile, scene);
+        }
+      }
     } else {
       $('modelIcon').classList.add('fail');
     }
