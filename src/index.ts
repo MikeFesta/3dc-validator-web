@@ -50,11 +50,7 @@ async function loadModel(validator: Validator): Promise<void> {
     const modelLoadingSpinner = $('modelLoadingSpinner');
     modelCubeSvg.style.display = 'none';
     modelLoadingSpinner.style.display = 'block';
-    if (input.files.length === 1) {
-      await validator.model.loadFromGlbFile(input.files[0]);
-    } else {
-      await validator.model.loadFromGltfFiles(Array.from(input.files));
-    }
+    await validator.model.loadFromFileInput(Array.from(input.files));
     modelCubeSvg.style.display = '';
     modelLoadingSpinner.style.display = 'none';
     if (validator.model.loaded) {
@@ -94,7 +90,7 @@ async function loadModel(validator: Validator): Promise<void> {
       engine.runRenderLoop(() => scene.render());
 
       // Load the model
-      const assetArrayBuffer = validator.model.arrayBuffer;
+      const assetArrayBuffer = validator.model.glb.getBytes();
       if (assetArrayBuffer) {
         // Single glb with data available from the validator
         const assetBlob = new Blob([assetArrayBuffer]);
@@ -477,7 +473,7 @@ function downloadReportCsv(validator: Validator) {
   const dataString = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
   const a = document.createElement('a');
   a.href = dataString;
-  a.download = getFilenameWithTimestamp(validator.model.filename) + '.csv';
+  a.download = getFilenameWithTimestamp(validator.model.glb.filename) + '.csv';
   a.click();
 }
 
@@ -486,7 +482,7 @@ function downloadReportJson(validator: Validator) {
   const dataString = 'data:text/json;charset=utf-8,' + encodeURIComponent(jsonString);
   const a = document.createElement('a');
   a.href = dataString;
-  a.download = getFilenameWithTimestamp(validator.model.filename) + '.json';
+  a.download = getFilenameWithTimestamp(validator.model.glb.filename) + '.json';
   a.click();
 }
 
