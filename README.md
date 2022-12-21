@@ -1,42 +1,38 @@
-# Khronos 3D Commerce Asset Validator Single Page Application Implementation
+# Khronos 3D Commerce Asset Validator
+
+# Web Implementation (single page app)
 
 ## SPDX-License-Identifier: Apache-2.0
 
-**This is a work in progress.**
+This is a sub-project of the 3DC-Validator which shows how to implement a version from a web browser stand alone page.
 
-### Usage
-open index.html in a modern web browser
+### Usage - Compile and Test Locally
 
-### About this project
-This is an implementation of the 3dc-validator npm package that runs in a
-web browser.
+This project uses Node + webpack to build dist/main.js.
 
-The primary objective of this tools is to check a 3D model against a
-specification file to report if the model meets the requirements for a given
-use case. The specification is based on the Asset Creation Guidelines set forth
-by the Khronos Group's 3D Commerce Working Group, which are available here:
-https://github.com/KhronosGroup/3DC-Asset-Creation/
+Run npm i to install dependencies (3DC-Validator and Babylon.js).
 
-#### Checks currently available
-* File Size (min/max)
-* Triangle Count (max)
-* Material Count (max)
-* Texture Map Resolution Power of 2
-* Dimensions (min/max)
-* Dimensions (product within tolerance)
+```
+# Install Dependencies
+npm i
+```
 
-#### Checks to be added
-* Transparent Geometry Separated
-* 0-1 UV Texture Space
-* Mesh Count
-* Node Count
-* Primitive Count
-* Texture Map Resolution (min/max by type)
-* Texture Density
-* Hard Edges
-* PBR Safe Colors
-* UV Overlaps
-* UV Margin Size
-* Inverted UVs
-* Clean Origin for Top Node
-* Non-Manifold Edges
+Build the project to generate main.js in the dist/ folder.
+
+```
+# Compile the code with Webpack
+npm run build
+```
+
+A simple web server can be run using python for local testing.
+
+```
+# Run a simple server on http://localhost:3000
+python3 -m http.server 3000
+```
+
+Open http://localhost:3000 in a modern web browser to test it out.
+
+### Deployment
+
+index.html and the dist/ folder are all of the required files and can be statically hosted from any server after they are built.

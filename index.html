@@ -5,43 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>3D Commerce Validator</title>
     <style>
+      /* style elements are inline here for simplicity */
       body {
         font-family: Avenir, Helvetica, Arial, sans-serif;
         margin: 0;
         padding: 0;
       }
-      .heading {
-        background-color: #234761;
-        box-shadow: 0 3px 6px #666;
-        color: #b9ccdd;
-        margin: 0 0 30px 0;
-      }
-      .icon {
-        color: #AAA;
-        width: 50%;
-        margin: 10px auto;
-      }
-      .title {
-        font-size: 150%;
-        padding: 8px 6px;
-      }
-      .version {
-        color: #eee;
-        font-size: 75%;
-        float: right;
-        padding: 6px;
-      }
-      .github {
-        background-color: #0d1720;
-        font-size: 90%;
-        padding: 3px;
-      }
-      .github a {
-        color: #b9ccdd;
-      }
       .container {
         display: flex;
         margin-bottom: 20px;
+      }
+      .download,
+      .edit {
+        cursor: pointer;
+        font-size: 150%;
+        margin: auto;
+        padding: 2px 10px;
       }
       .drop-area {
         border: dashed 3px #000;
@@ -52,13 +31,58 @@
         text-align: center;
         width: 30%;
       }
+      .fail {
+        background-color: #fee;
+        color: #f00;
+      }
+      .github {
+        background-color: #0d1720;
+        font-size: 90%;
+        padding: 3px;
+      }
+      .github a {
+        color: #b9ccdd;
+      }
+      .heading {
+        background-color: #234761;
+        box-shadow: 0 3px 6px #666;
+        color: #b9ccdd;
+        margin: 0 0 30px 0;
+      }
       .highlight {
         background-color:#ff9;
       }
-      .report-container {
-        border: double 3px #000;
-        margin: 20px;
-        padding: 10px;
+      .icon {
+        color: #AAA;
+        width: 50%;
+        margin: 10px auto;
+      }
+      .instructions {
+        color: #333;
+        padding: 8px;
+      }
+      .introduction {
+        padding: 10px 20px;
+      }
+      .loading-spinner {
+        background-image: url('https://cdn.3xr.com/images/cube-spinner.gif');
+        background-position: center;
+        width: 120px;
+        height: 120px;
+        margin: auto;
+        padding-bottom: 5px;
+      }
+      .note {
+        background-color: #ffa;
+        margin: 6px;
+        padding: 2px 4px;
+      }
+      .pass {
+        background-color: #efe;
+        color: #060;
+      }
+      .recommended {
+        color: #234761;
       }
       .report {
         border: solid 1px #000;
@@ -69,21 +93,26 @@
         border: solid 1px #000;
         vertical-align: top;
       }
-      .report-item-name {
-        text-align: right;
-        width: 25%;
-      }
-      .report-item-value {
-        text-align: left;
-        width: 25%;
+      .report-container {
+        border: double 3px #000;
+        margin: 20px;
+        padding: 10px;
       }
       .report-item-message {
         text-align: left;
         width: 30%;
       }
+      .report-item-name {
+        text-align: right;
+        width: 25%;
+      }
       .report-item-url {
         text-align: left;
         width: 20%;
+      }
+      .report-item-value {
+        text-align: left;
+        width: 25%;
       }
       .report-title {
         font-size: 120%;
@@ -91,46 +120,13 @@
         text-decoration: underline;
         text-align: center;
       }
-      .pass {
-        background-color: #efe;
-        color: #060;
-      }
-      .fail {
-        background-color: #fee;
-        color: #f00;
-      }
-      .not-tested {
-        background-color: #eee;
-        color: #666;
-      }
-      .development-note {
-        background-color: #ff0;
-        padding: 8px 4px;
-        text-align: center;
-      }
-      .schema-note {
-        background-color:#afa;
-        padding: 8px 4px;
-        text-align: center;
-      }
-      .edit,
-      .download {
-        cursor: pointer;
-        font-size: 150%;
+      .schema-settings-table {
+        border: solid 1px #000;
+        padding: 30px;
         margin: auto;
-        padding: 2px 10px;
       }
-      .instructions {
-        color: #333;
-        padding: 8px;
-      }
-      .introduction {
-        padding: 10px 20px;
-      }
-      .note {
-        background-color: #ffa;
-        margin: 6px;
-        padding: 2px 4px;
+      .schema-settings-table td {
+        padding-bottom: 10px;
       }
       .section {
         border: solid 1px #666;
@@ -142,38 +138,30 @@
         margin: 0;
         padding: 4px 8px;
       }
-      .recommended {
-        color: #234761;
-      }
-      .schema-settings-table {
-        border: solid 1px #000;
-        padding: 30px;
-        margin: auto;
-      }
-      .schema-settings-table td {
-        padding-bottom: 10px;
-      }
       .slow {
         color: #f00;
         font-style: italic;
       }
-      .loading-spinner {
-        background-image: url('https://cdn.3xr.com/images/cube-spinner.gif');
-        background-position: center;
-        width: 120px;
-        height: 120px;
-        margin: auto;
-        padding-bottom: 5px;
+      .title {
+        font-size: 150%;
+        padding: 8px 6px;
+      }
+      .version {
+        color: #eee;
+        font-size: 75%;
+        float: right;
+        padding: 6px;
       }
     </style>
   </head>
   <body>
     <script src="dist/main.js"></script>
+
     <div class="heading">
       <div class="version" id="version"></div>
       <div class="title">3D Commerce Validator</div>
       <div class="github">
-        <a href="https://github.com/MikeFesta/3dc-validator-web">https://github.com/MikeFesta/3dc-validator-web</a>
+        <a href="https://github.com/KhronosGroup/3DC-Validator/web-example">https://github.com/KhronosGroup/3DC-Validator/web-example</a>
       </div>
     </div>
 
@@ -181,16 +169,13 @@
       <strong>Welcome to the Khronos 3D Commerce Asset Validator!</strong>
       <p>
         This is a web-based example implementation of the
-        <a href="https://github.com/MikeFesta/3dc-validator">3DC-validator</a>.
+        <a href="https://github.com/KhronosGroup/3DC-Validator">3DC-validator</a>.
         It allows you to quickly check a glTF file for a specific use case, defined by a schema.
         Use cases could include publishing to a specific retailer or advertising platform.
-        The Khronos Group invites companies to submit their schemas to our public repository.
-      </p>
-      <p class="note">
-        <strong>Your Data is Secure</strong> - All processing happens locally in your web browser. No data is sent to a server for remote / cloud processing.
+        The Khronos Group invites companies to provide a link to their schemas for us to publish.
       </p>
       <p>
-        You can use the same npm package in your own Node or browser-based project for automated 3D asset validation.
+        You can use the same npm package in your own Node or browser-based project for automated 3D asset validation. See <a href="https://github.com/KhronosGroup/3DC-Validator/tree/main/cli-example">https://github.com/KhronosGroup/3DC-Validator/tree/main/cli-example</a>.
       </p>
     </div>
 
@@ -199,7 +184,6 @@
       <p class="instructions">
         The 3D Commerce recommended values are based on the <a href="https://github.com/KhronosGroup/3DC-Asset-Creation/blob/main/asset-creation-guidelines/RealtimeAssetCreationGuidelines.md">Asset Creation Guidelines</a>.
         You can edit these settings and download a json file for future use.
-        There are also sample schemas <a href="https://github.com/MikeFesta/3dc-validator-tests/tree/main/schemas">available in the test repo</a>.
       </p>
       <div class="container">
         <div id="schemaDefaults" class="drop-area recommended">
@@ -490,12 +474,13 @@
         </table>
       </div>
     </div>
+
     <div class="section">
       <h3>2. Product Dimensions (optional)</h3>
       <p class="instructions">
         The dimensions of the product can be entered here and will be checked within the tolerance threshold specified by the schema.
       </p>
-      <p class="instructions">Editable form coming soon. Meanwhile, you can load a json file tha <a href="https://github.com/MikeFesta/3dc-validator-tests/blob/main/products/blender-default-cube-passing.json">looks like this</a>.</p>
+      <p class="instructions">JSON object structure is <a href="https://github.com/KhronosGroup/3DC-Validator/blob/main/src/ProductInfoJSON.ts">specified here</a>.</p>
       <div class="container">
         <div id="productInfoDropArea" class="drop-area">
           <h2>Product Info JSON</h2>
@@ -508,6 +493,7 @@
         </div>
       </div>
     </div>
+
     <div class="section">
       <h3>
         3. 3D Model
@@ -517,7 +503,7 @@
       </div>
       <div id="modelLoader">
         <p class="instructions">
-          Load the 3D model after editing / uploading the schema settings.
+          Load the 3D model after editing / uploading the schema settings or some tests marked <span class="slow">slow</span> may not run properly.
         </p>
         <div class="container">
           <div id="modelDropArea" class="drop-area">
@@ -531,8 +517,12 @@
             <input id="modelInput" type="file" multiple placeholder="Click Here"/>
           </div>
         </div>
+        <p class="note">
+          <strong>Your Data is Secure</strong> - All processing happens locally in your web browser. No data is sent to a server for remote / cloud processing.
+        </p>
       </div>
     </div>
+
     <div class="report-container">
       <div class="report-title">Validation Report</div>
       <table class="report" id="report">
@@ -541,7 +531,7 @@
             Report will be generated after the model has been loaded.
           </p>
           <p>
-            This may take a minute if the file is large and slow tests are required.</td></tr>
+            This may take a minute if the file is large and <span class="slow">slow</span> tests are required.</td></tr>
           </p>
       </table>
     </div>
