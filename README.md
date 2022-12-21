@@ -2,6 +2,16 @@
 
 # Web Implementation (single page app)
 
+## THIS PROJECT HAS BEEN PUBLISHED TO
+
+## https://github.com/KhronosGroup/3DC-Validator
+
+### Future development will continue in that repository.
+
+This repository was used for development of version 1.0.0 and will be kept around to preserve the commit history.
+
+---
+
 ## SPDX-License-Identifier: Apache-2.0
 
 This is a sub-project of the 3DC-Validator which shows how to implement a version from a web browser stand alone page.
